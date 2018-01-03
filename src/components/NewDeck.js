@@ -10,10 +10,20 @@ class NewDeck extends Component{
         text:null
     }
 
-    submit=(deck)=>{
-        const {goBack} = this.props.navigation;
-        deck !== null && this.props.submitDeck(deck)
-        goBack()
+    submit=(deckTitle)=>{
+        const {navigation} = this.props
+
+        if (deckTitle !== null && deckTitle !== '') {
+            let deck = {
+                title:deckTitle,
+                questions:[]
+            }
+            this.props.submitDeck(deck)
+            navigation.navigate('DeckDetail', {deck})
+        } else {
+            //错误提示
+        }
+
     }
 
     render(){
@@ -52,15 +62,14 @@ const styles = StyleSheet.create({
         marginBottom:20
     },
     input:{
-        marginLeft:10,
         marginRight:10,
+        marginLeft: 5,
         marginTop:20,
         marginBottom:20,
 
         height:35,
         width:250,
         borderWidth:1,
-        marginLeft: 5,
         paddingLeft:5,
         borderColor: '#ccc',
         borderRadius: 4

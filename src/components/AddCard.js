@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text,StyleSheet,TouchableOpacity,ScrollView,TextInput } from 'react-native'
+import { View, Text,StyleSheet,TouchableOpacity,ScrollView,TextInput,KeyboardAvoidingView } from 'react-native'
 import {connect} from 'react-redux'
 import { addCard } from '../actions'
 
@@ -8,7 +8,8 @@ class AddCard extends Component{
     state={
          answer:null,
          question:null,
-        rightAnswer:true
+         rightAnswer:true,
+         behavior: 'padding'
     }
 
 
@@ -16,7 +17,7 @@ class AddCard extends Component{
         const card = {question,answer,rightAnswer}
         const {goBack} = this.props.navigation;
         this.props.dispatch(addCard(deck,card))
-        goBack()
+        goBack(null)
     }
 
 
@@ -29,29 +30,30 @@ class AddCard extends Component{
         return(
             <View style={styles.container}>
                 <View>
-                    <View style={styles.input}>
-                        <TextInput
-                                   style={styles.inputText}
-                                   placeholder='Please input your question'
-                                   keyboardType='default' value={this.state.question}
-                                   onChangeText={(question) => this.setState({question})}/>
-                        <TextInput
-                                   style={styles.inputText}
-                                   placeholder='Please input your answer'
-                                   keyboardType='default' value={this.state.answer}
-                                   onChangeText={(answer) => this.setState({answer})}/>
-                    </View>
-                    <Text>The answer to your question is Right or Wrong?</Text>
-                    <View style={styles.setRightAnswer}>
-                        <TouchableOpacity style={styles.setRightAnswerBtn}
-                                          onPress={()=>this.setState({rightAnswer:true})} >
-                            <Text >Right</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity  style={styles.setRightAnswerBtn}
-                                           onPress={()=>this.setState({rightAnswer:false})} >
-                            <Text >Wrong</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <KeyboardAvoidingView behavior={this.state.behavior} style={styles.input}>
+
+                            <TextInput
+                                       style={styles.inputText}
+                                       placeholder='Please input your question'
+                                       keyboardType='default' value={this.state.question}
+                                       onChangeText={(question) => this.setState({question})}/>
+                            <TextInput
+                                       style={styles.inputText}
+                                       placeholder='Please input your answer'
+                                       keyboardType='default' value={this.state.answer}
+                                       onChangeText={(answer) => this.setState({answer})}/>
+                    </KeyboardAvoidingView>
+                        <Text>The answer to your question is Right or Wrong?</Text>
+                        <View style={styles.setRightAnswer}>
+                            <TouchableOpacity style={styles.setRightAnswerBtn}
+                                              onPress={()=>this.setState({rightAnswer:true})} >
+                                <Text >Right</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity  style={styles.setRightAnswerBtn}
+                                               onPress={()=>this.setState({rightAnswer:false})} >
+                                <Text >Wrong</Text>
+                            </TouchableOpacity>
+                        </View>
                 </View>
                 <TouchableOpacity style={styles.submitBtn} onPress={()=>this.submit(deck,this.state.question,this.state.answer,this.state.rightAnswer)} >
                     <Text style={styles.submitText}>Submit</Text>
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
         padding:10,
         margin:10,
         justifyContent:'center',
-        margin:10,
         backgroundColor:'#010101',
         borderRadius: 7,
     },

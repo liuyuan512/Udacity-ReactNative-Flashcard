@@ -1,4 +1,4 @@
-import {ADD_DECK,ADD_CARD} from '../actions'
+import {ADD_DECK,ADD_CARD} from '../actions/index'
 
 const defaultDecks = {
     React: {
@@ -34,12 +34,10 @@ const decks = (state=defaultDecks,action)=>{
         case ADD_DECK:
             return {
                 ...state,
-                [deck]:{
-                    title:deck,
-                    questions:[]
-                }
+                [deck.title]:deck
             }
         case ADD_CARD:
+            console.log("新增加的deck的新增加的addcard---",deck,state)
             return{
                 ...state,
                 [deck]:{

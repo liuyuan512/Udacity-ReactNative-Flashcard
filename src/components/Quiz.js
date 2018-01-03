@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text,StyleSheet,TouchableOpacity,ScrollView } from 'react-native'
+import DeckDetail from "./DeckDetail";
 
 
 class Quiz extends Component{
@@ -7,13 +8,13 @@ class Quiz extends Component{
     state={
         showAnswer:false,
         index:0,
-        rightAnswers:0
+        rightAnswers:0,
+        questions:this.props.navigation.state.params.questions
     }
 
 
     clickCorrect=()=>{
-        const {questions} =this.props.navigation.state.params
-        const {index} = this.state
+        const {index,questions} = this.state
 
             this.setState((preState)=>({
                 rightAnswers:questions[index].rightAnswer === true?preState.rightAnswers+1:preState.rightAnswers,
@@ -22,8 +23,7 @@ class Quiz extends Component{
     }
 
     clickInCorrect=()=>{
-        const {questions} =this.props.navigation.state.params
-        const {index} = this.state
+        const {index,questions} = this.state
 
             this.setState((preState)=>({
                 rightAnswers:questions[index].rightAnswer === false?preState.rightAnswers+1:preState.rightAnswers,
@@ -31,9 +31,25 @@ class Quiz extends Component{
             }))
     }
 
+    startOver = () =>{
+        this.setState({
+            showAnswer:false,
+            index:0,
+            rightAnswers:0,
+            questions:this.props.navigation.state.params.questions
+        })
+    }
+
+    goToDeck = ()=>{
+        console.log("Quize的props------------",this.props)
+        this.props.navigation.goBack("DeckDetail")
+
+    }
 
     render(){
         console.log("Quiz的state==========",this.state)
+        console.log("Quiz的props==========",this.props)
+
         const {questions} =this.props.navigation.state.params
         const {showAnswer,index,rightAnswers} = this.state
 
@@ -44,6 +60,16 @@ class Quiz extends Component{
                 <Text style={styles.score}>
                     Your Score is: {rightAnswers/questions.length * 100} score!
                 </Text>
+                <View style={styles.setRightAnswer}>
+                    <TouchableOpacity style={styles.setRightAnswerBtn}
+                                      onPress={()=>this.startOver()} >
+                        <Text >Start Over</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity  style={styles.setRightAnswerBtn}
+                                       onPress={()=>this.goToDeck()} >
+                        <Text >Go to Deck</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
             :
             <View style={styles.container}>
@@ -138,5 +164,18 @@ const styles = StyleSheet.create({
         color:'#ffffff',
         textAlign:'center',
         fontSize:20,
-    }
+    },
+    setRightAnswer:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        alignItems:'center',
+        padding:10,
+        margin:10
+    },
+    setRightAnswerBtn:{
+        padding:10,
+        margin:10,
+        justifyContent:'center',
+        borderRadius: 7,
+    },
 })
